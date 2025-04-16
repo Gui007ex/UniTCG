@@ -22,23 +22,21 @@ services:
   produto:
     build: ./produto
     ports:
-      - "5001:5000"
-    environment:
-      DB_HOST: produto-db
-      DB_USER: produto_user
-      DB_PASSWORD: produto_pass
-      DB_NAME: produto_db
+      - "8081:8080"
     depends_on:
       - produto-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://produto-db:5432/produto_db
+      SPRING_DATASOURCE_USERNAME: produto_user
+      SPRING_DATASOURCE_PASSWORD: produto_pass
 
   usuario:
     build: ./usuario
     ports:
-      - "5002:5000"
-    environment:
-      DB_HOST: usuario-db
-      DB_USER: usuario_user
-      DB_PASSWORD: usuario_pass
-      DB_NAME: usuario_db
+      - "8082:8080"
     depends_on:
       - usuario-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://usuario-db:5432/usuario_db
+      SPRING_DATASOURCE_USERNAME: usuario_user
+      SPRING_DATASOURCE_PASSWORD: usuario_pass
