@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  produto-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: produto_user
+      POSTGRES_PASSWORD: produto_pass
+      POSTGRES_DB: produto_db
+    ports:
+      - "5433:5432"
+
+  usuario-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: usuario_user
+      POSTGRES_PASSWORD: usuario_pass
+      POSTGRES_DB: usuario_db
+    ports:
+      - "5434:5432"
+
+  produto:
+    build: ./produto
+    ports:
+      - "5001:5000"
+    environment:
+      DB_HOST: produto-db
+      DB_USER: produto_user
+      DB_PASSWORD: produto_pass
+      DB_NAME: produto_db
+    depends_on:
+      - produto-db
+
+  usuario:
+    build: ./usuario
+    ports:
+      - "5002:5000"
+    environment:
+      DB_HOST: usuario-db
+      DB_USER: usuario_user
+      DB_PASSWORD: usuario_pass
+      DB_NAME: usuario_db
+    depends_on:
+      - usuario-db
