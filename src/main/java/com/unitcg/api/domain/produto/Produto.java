@@ -1,14 +1,13 @@
 package com.unitcg.api.domain.produto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.unitcg.api.domain.usuario.Usuario;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Table (name = "produto")
@@ -23,4 +22,7 @@ public class Produto {
     private UUID id;
     private String name;
     private String description;
+
+    @ManyToMany(mappedBy = "produtos")
+    private Set<Usuario> usuarios;
 }
