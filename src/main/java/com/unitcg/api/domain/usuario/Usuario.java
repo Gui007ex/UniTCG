@@ -1,6 +1,6 @@
 package com.unitcg.api.domain.usuario;
 
-import com.unitcg.api.domain.produto.Produto;
+import com.unitcg.api.domain.carta.Carta;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,9 +25,9 @@ public class Usuario {
 
     @ManyToMany
     @JoinTable(
-            name = "usuario_produto",
+            name = "usuario_carta",
             joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id")
+            inverseJoinColumns = @JoinColumn(name = "carta_id")
     )
-    private Set<Produto> produtos;
+    private Set<Carta> cartas;
 }
