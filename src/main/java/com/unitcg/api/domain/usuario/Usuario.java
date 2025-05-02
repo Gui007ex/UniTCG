@@ -23,11 +23,4 @@ public class Usuario {
     private String name;
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "usuario_carta",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "carta_id")
-    )
-    private Set<Carta> cartas;
 }

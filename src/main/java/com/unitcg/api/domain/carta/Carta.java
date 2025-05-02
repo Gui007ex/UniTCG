@@ -21,10 +21,8 @@ public class Carta {
     @GeneratedValue
     private UUID id;
     private String name;
-    private String description;
+    private String code;
     private String imgUrl;
     private Double price;
 
-    @ManyToMany(mappedBy = "cartas")
-    private Set<Usuario> usuarios;
 }

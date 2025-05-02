@@ -3,6 +3,7 @@ package com.unitcg.api.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.unitcg.api.domain.carta.Carta;
 import com.unitcg.api.domain.carta.CartaRequestDTO;
+import com.unitcg.api.repositories.CartaRep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class CartaService {
     @Autowired
     private AmazonS3 s3Client;
 
+    @Autowired
+    private CartaRep repository;
+
     public Carta createCard(CartaRequestDTO data){
         String imgUrl = null;
 
@@ -33,10 +37,11 @@ public class CartaService {
 
         Carta newCarta = new Carta();
         newCarta.setName(data.name());
-        newCarta.setDescription(data.description());
+        newCarta.setCode(data.code());
         newCarta.setPrice(data.price());
-        newCarta.setUsuarios(data.usuarios());
         newCarta.setImgUrl(imgUrl);
+
+        repository.save(newCarta);
 
         return newCarta;
     }
@@ -52,7 +57,7 @@ public class CartaService {
         }
         catch (Exception e){
             System.out.println("Erro criando arquivo");
-            return null;
+            return "";
         }
     }
 
