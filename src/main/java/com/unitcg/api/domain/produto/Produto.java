@@ -1,4 +1,4 @@
-package com.unitcg.api.domain.carta;
+package com.unitcg.api.domain.produto;
 
 import com.unitcg.api.domain.usuario.Usuario;
 import jakarta.persistence.*;
@@ -7,22 +7,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
 import java.util.UUID;
 
-@Table (name = "carta")
+@Table (name = "produto")
 @Entity
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Carta {
+public class Produto {
     @Id
     @GeneratedValue
     private UUID id;
-    private String name;
+
+    private int type;
     private String code;
+    private String name;
     private String imgUrl;
     private Double price;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario dealer;
 }

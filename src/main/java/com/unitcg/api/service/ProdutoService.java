@@ -1,14 +1,15 @@
 package com.unitcg.api.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.unitcg.api.domain.carta.Carta;
-import com.unitcg.api.domain.carta.CartaRequestDTO;
-import com.unitcg.api.repositories.CartaRep;
+import com.unitcg.api.domain.produto.Produto;
+import com.unitcg.api.domain.produto.ProdutoRequestDTO;
+import com.unitcg.api.domain.usuario.Usuario;
+import com.unitcg.api.repositories.ProdutoRep;
+import com.unitcg.api.repositories.UsuarioRep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.events.Event;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +18,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class CartaService {
+public class ProdutoService {
 
     @Value("${aws.bucket.name}")
     private String bucketName;
@@ -26,24 +27,31 @@ public class CartaService {
     private AmazonS3 s3Client;
 
     @Autowired
-    private CartaRep repository;
+    private ProdutoRep repository;
 
-    public Carta createCard(CartaRequestDTO data){
+    @Autowired
+    private UsuarioRep usuarioRep;
+
+    public Produto createProduto(UUID usuarioId, ProdutoRequestDTO data){
         String imgUrl = null;
 
         if (data.image() != null){
             imgUrl = this.uploadImg(data.image());
         }
 
-        Carta newCarta = new Carta();
-        newCarta.setName(data.name());
-        newCarta.setCode(data.code());
-        newCarta.setPrice(data.price());
-        newCarta.setImgUrl(imgUrl);
+        Usuario usuario = usuarioRep.findById(usuarioId).orElseThrow(() -> new IllegalArgumentException(("Usuario não encontrado")));
 
-        repository.save(newCarta);
+        Produto newProduto = new Produto();
+        newProduto.setName(data.name());
+        newProduto.setType(data.type());
+        newProduto.setCode(data.code());
+        newProduto.setPrice(data.price());
+        newProduto.setImgUrl(imgUrl);
+        newProduto.setDealer(usuario);
 
-        return newCarta;
+        repository.save(newProduto);
+
+        return newProduto;
     }
 
     private String uploadImg(MultipartFile multpartFile){
