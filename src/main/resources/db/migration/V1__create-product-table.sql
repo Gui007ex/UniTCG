@@ -1,7 +1,0 @@
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
-CREATE TABLE produto (
-    id UUID DEFAULT gen_random_UUID() PRIMARY KEY,
-    name VARCHAR(30) NOT NULL,
-    description VARCHAR(200) NOT NULL
-);

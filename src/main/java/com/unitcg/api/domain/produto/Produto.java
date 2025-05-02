@@ -1,9 +1,7 @@
 package com.unitcg.api.domain.produto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.unitcg.api.domain.usuario.Usuario;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +19,14 @@ public class Produto {
     @Id
     @GeneratedValue
     private UUID id;
+
+    private int type;
+    private String code;
     private String name;
-    private String description;
+    private String imgUrl;
+    private Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario dealer;
 }
