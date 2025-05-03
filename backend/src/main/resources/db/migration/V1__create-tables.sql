@@ -17,4 +17,15 @@ CREATE TABLE produto (
     FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );
 
+CREATE TABLE carta (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(30) NOT NULL,
+    description VARCHAR(500) NOT NULL,
+    code VARCHAR(20) NOT NULL,
+    img_url VARCHAR(500) NOT NULL,
+    price INT NOT NULL,
+    usuario_id UUID,
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+)
+
 

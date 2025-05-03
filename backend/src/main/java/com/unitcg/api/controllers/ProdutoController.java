@@ -23,7 +23,7 @@ public class ProdutoController {
     public ResponseEntity<Produto> create(@PathVariable UUID usuarioId,
                                           @RequestParam("name") String name,
                                           @RequestParam("description") String description,
-                                          @RequestParam("price") Double price,
+                                          @RequestParam("price") int price,
                                           @RequestParam(value= "image", required = false) MultipartFile image){
         ProdutoRequestDTO produtoRequestDTO = new ProdutoRequestDTO(name, description, price, image);
         Produto newProduto = this.produtoService.createProduto(usuarioId, produtoRequestDTO);
