@@ -19,6 +19,7 @@ public class Usuario {
     @Id
     @GeneratedValue
     private UUID id;
+
     private String name;
     private String password;
 

@@ -64,6 +64,11 @@ public class ProdutoService {
         return newProduto;
     }
 
+    public void deleteProduto(UUID id){
+        Produto produto = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+        repository.delete(produto);
+    }
+
     private String uploadImg(MultipartFile multpartFile){
         String fileName = UUID.randomUUID() + "-" + multpartFile.getOriginalFilename();
 

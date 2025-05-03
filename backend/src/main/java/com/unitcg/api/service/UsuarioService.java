@@ -28,7 +28,12 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO getUsuario(UUID id){
-        Usuario usuario = this.repository.getById(id);
+        Usuario usuario = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado"));
         return new UsuarioResponseDTO(usuario.getId(), usuario.getName(), usuario.getEmail());
+    }
+
+    public void deleteUsuario(UUID id){
+        Usuario usuario = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException(("Usuario não encontrado")));
+        repository.delete(usuario);
     }
 }

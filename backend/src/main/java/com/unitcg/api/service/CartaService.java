@@ -40,7 +40,7 @@ public class CartaService {
     public List<CartaResponseDTO> getCartas(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Carta> cartasPage = this.repository.findAll(pageable);
-        return cartasPage.map(carta -> new CartaResponseDTO(carta.getId(), carta.getName(), carta.getCode(), carta.getDescription(), carta.getImgUrl())).stream().toList();
+        return cartasPage.map(carta -> new CartaResponseDTO(carta.getId(), carta.getName(), carta.getCode(), carta.getPrice(), carta.getDescription(), carta.getImgUrl(), carta.getDealer())).stream().toList();
     }
 
     public Carta createProduto(UUID usuarioId, CartaRequestDTO data){
@@ -63,6 +63,11 @@ public class CartaService {
         repository.save(newCarta);
 
         return newCarta;
+    }
+
+    public void deleteCarta(UUID id){
+        Carta carta = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Carta não encontrada"));
+        repository.delete(carta);
     }
 
     private String uploadImg(MultipartFile multpartFile){

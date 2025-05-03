@@ -30,4 +30,10 @@ public class UsuarioController {
         UsuarioResponseDTO usuario = this.usuarioService.getUsuario(usuarioId);
         return ResponseEntity.ok(usuario);
     }
+
+    @PostMapping(value = "/delete/{usuarioId}")
+    public ResponseEntity<String> removeUsuario(@PathVariable UUID usuarioId){
+        this.usuarioService.deleteUsuario(usuarioId);
+        return ResponseEntity.ok("Usuario excluído com sucesso");
+    }
 }
