@@ -40,7 +40,7 @@ public class ProdutoService {
     public List<ProdutoResponseDTO> getProdutos(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Produto> produtosPage = this.repository.findAll(pageable);
-        return produtosPage.map(produto -> new ProdutoResponseDTO(produto.getId(), produto.getName(), produto.getType(), produto.getCode(), produto.getPrice(), produto.getImgUrl(), produto.getDealer())).stream().toList();
+        return produtosPage.map(produto -> new ProdutoResponseDTO(produto.getId(), produto.getName(), produto.getDescription(), produto.getPrice(), produto.getImgUrl(), produto.getDealer())).stream().toList();
     }
 
     public Produto createProduto(UUID usuarioId, ProdutoRequestDTO data){
@@ -54,8 +54,7 @@ public class ProdutoService {
 
         Produto newProduto = new Produto();
         newProduto.setName(data.name());
-        newProduto.setType(data.type());
-        newProduto.setCode(data.code());
+        newProduto.setDescription(data.description());
         newProduto.setPrice(data.price());
         newProduto.setImgUrl(imgUrl);
         newProduto.setDealer(usuario);

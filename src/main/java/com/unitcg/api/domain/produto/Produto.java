@@ -15,13 +15,12 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Produto {
+public class Produto{
     @Id
     @GeneratedValue
     private UUID id;
 
-    private int type;
-    private String code;
+    private String description;
     private String name;
     private String imgUrl;
     private Double price;

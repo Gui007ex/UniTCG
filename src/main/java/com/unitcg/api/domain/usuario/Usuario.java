@@ -1,6 +1,7 @@
 package com.unitcg.api.domain.usuario;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,8 @@ public class Usuario {
     private UUID id;
     private String name;
     private String password;
+
+    @Email (message = "Email inválido")
+    private String email;
 
 }

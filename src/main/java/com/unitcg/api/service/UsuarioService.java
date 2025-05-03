@@ -16,6 +16,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setName(usuarioData.name());
         usuario.setPassword(usuarioData.password());
+        usuario.setEmail(usuarioData.email());
 
         repository.save(usuario);
 

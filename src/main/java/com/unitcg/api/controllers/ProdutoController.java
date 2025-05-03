@@ -22,11 +22,10 @@ public class ProdutoController {
     @PostMapping (value = "/usuario/{usuarioId}" , consumes = "multipart/form-data")
     public ResponseEntity<Produto> create(@PathVariable UUID usuarioId,
                                           @RequestParam("name") String name,
-                                          @RequestParam("type") int type,
-                                          @RequestParam("code") String code,
+                                          @RequestParam("description") String description,
                                           @RequestParam("price") Double price,
                                           @RequestParam(value= "image", required = false) MultipartFile image){
-        ProdutoRequestDTO produtoRequestDTO = new ProdutoRequestDTO(name, type, code, price, image);
+        ProdutoRequestDTO produtoRequestDTO = new ProdutoRequestDTO(name, description, price, image);
         Produto newProduto = this.produtoService.createProduto(usuarioId, produtoRequestDTO);
         return ResponseEntity.ok(newProduto);
     }
