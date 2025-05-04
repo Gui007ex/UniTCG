@@ -1,0 +1,9 @@
+.option{
+    width: 100%;
+    padding: 8px;
+}
+
+.formContainer{
+    display: flex;
+    gap: 1rem;
+}

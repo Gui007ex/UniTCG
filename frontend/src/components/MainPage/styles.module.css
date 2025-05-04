@@ -1,0 +1,34 @@
+
+.app{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-height: 100vh;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0px 5px;
+}
+
+.banner{
+    background-image: url(../src/assets/cardpop_pokemon_151_horizontal_banner.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 525px;
+}
+
+/* .page{
+    display: flex;
+    flex-direction: row;
+} */
+
+.floatButton{
+    position: fixed;
+    z-index: 200;
+    bottom: 2rem;
+    right: 2rem;
+}

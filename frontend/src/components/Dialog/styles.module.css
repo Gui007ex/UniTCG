@@ -1,0 +1,27 @@
+.card{
+    display: flex;
+    gap: 1.5rem;
+}
+
+.img{
+    width: 18rem;
+}
+
+.cardContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.avatar{
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    border-top: 1px solid #dddddd;
+    padding-top: 15px;
+}
+
+.shoppingCart{
+    display: flex;
+    gap: 0.5rem;
+}
