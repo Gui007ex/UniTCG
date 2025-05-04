@@ -13,7 +13,6 @@ const Profile: React.FC = () => {
   const [user, setUser] = useState<Usuario | null>(null);
   const [myCards, setMyCards] = useState<Carta[]>([]);
 
-  // 1) Carrega o usuário logado do localStorage
   useEffect(() => {
     const stored = localStorage.getItem('user');
     if (stored) {
@@ -21,7 +20,6 @@ const Profile: React.FC = () => {
     }
   }, []);
 
-  // 2) Quando tivermos o user, busca e filtra as cartas dele
   useEffect(() => {
     if (!user) return;
 
@@ -50,7 +48,6 @@ const Profile: React.FC = () => {
       <Toolbar />
 
       <div className={styles.container}>
-        {/* Seção de Perfil */}
         <div className={styles.containerProfile}>
           <Avatar sx={{ width: 80, height: 80 }}>
             {user.name[0].toUpperCase()}
@@ -65,7 +62,6 @@ const Profile: React.FC = () => {
           <Button variant="contained">Editar perfil</Button>
         </div>
 
-        {/* Seção de Anúncios */}
         <div className={styles.containerInfo}>
           <Typography variant="h5" gutterBottom>
             Meus Anúncios

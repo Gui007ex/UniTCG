@@ -1,4 +1,3 @@
-// src/components/Dialog/index.tsx
 import React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
@@ -47,6 +46,10 @@ export default function CustomizedDialog({
   dealerName,
 }: Props) {
   const navigate = useNavigate();
+
+  const storedUser = localStorage.getItem('user');
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const isDealer = user ? user.name === dealerName : false;
 
   const handleBuy = () => {
     onClose();
@@ -107,9 +110,10 @@ export default function CustomizedDialog({
           onClick={handleBuy}
           variant="outlined"
           className={styles.shoppingCart}
+          disabled={isDealer}
         >
           <AddShoppingCartIcon fontSize="small" />
-          Comprar
+          {isDealer ? 'Seu Anúncio' : 'Comprar'}
         </Button>
       </DialogActions>
     </BootstrapDialog>

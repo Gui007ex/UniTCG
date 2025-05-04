@@ -15,11 +15,16 @@ const Cards: React.FC<CardsProps> = ({ cardData }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <div className="container">
-      <MUICard className={styles.card} sx={{ maxWidth: 200, minHeight: 300 }}>
-        <CardMedia component="img" image={imgUrl} alt={name} />
+    <div className={styles.cardWrapper}>
+      <MUICard className={styles.card}>
+        <CardMedia
+          component="img"
+          image={imgUrl}
+          alt={name}
+          className={styles.media}
+        />
         <CardContent className={styles.cardContainer}>
-          <Typography gutterBottom variant="button" component="div">
+          <Typography gutterBottom variant="button" component="div" className={styles.title}>
             {title}
           </Typography>
           <Typography variant="body2" className={styles.priceTag}>

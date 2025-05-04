@@ -8,12 +8,11 @@ import { Button, CircularProgress, Typography } from '@mui/material';
 
 const CardList: React.FC = () => {
   const [cards, setCards] = useState<Carta[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [filteredCards, setFilteredCards] = useState<Carta[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchTerm, setSearchTerm] = useState<string>(''); 
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
-  // carrega as cartas do back
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -23,46 +22,73 @@ const CardList: React.FC = () => {
         setFilteredCards(all);
       } catch (err) {
         console.error('Erro ao buscar cartas:', err);
-      } finally{
+      } finally {
         setLoading(false);
       }
     };
     load();
   }, []);
 
+  useEffect(() => {
+    const filtered = cards.filter(card =>
+      card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      card.code.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCards(filtered);
+    setCurrentPage(1);
+  }, [searchTerm, cards]);
+
+  const itemsPerPage = 8;
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentItems = filteredCards.slice(indexOfFirst, indexOfLast);
+
   const handleNextPage = () => {
-    setCurrentPage((prev) => prev + 1);
+    if (indexOfLast < filteredCards.length) setCurrentPage(prev => prev + 1);
   };
 
   const handlePrevPage = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    if (currentPage > 1) setCurrentPage(prev => prev - 1);
   };
 
   return (
     <>
-      <Search onSearchChange={(value) => {
-        setSearchTerm(value);
-        setCurrentPage(1);
-      }} />
+      <Search onSearchChange={value => setSearchTerm(value)} />
+
       {loading ? (
-        <div className={styles['progress']}>
+        <div className={styles.progress}>
           <CircularProgress />
         </div>
       ) : (
         <>
-          <div className={styles['cards-grid']}>
-            {cards.map((card) => (
-              <Cards key={card.id} cardData={card} />
-            ))}
-          </div>
+          {currentItems.length === 0 ? (
+            <Typography variant="h6">Nenhuma carta encontrada.</Typography>
+          ) : (
+            <div className={styles['cards-grid']}>
+              {currentItems.map(card => (
+                <Cards key={card.id} cardData={card} />
+              ))}
+            </div>
+          )}
+
           <div className={styles['pagination-controls']}>
-            <Button onClick={handlePrevPage} disabled={currentPage === 1} variant="outlined">
+            <Button
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              variant="outlined"
+            >
               Anterior
             </Button>
+
             <Typography variant="button" component="div">
               Página {currentPage}
             </Typography>
-            <Button onClick={handleNextPage} variant="outlined">
+
+            <Button
+              onClick={handleNextPage}
+              disabled={indexOfLast >= filteredCards.length}
+              variant="outlined"
+            >
               Próxima
             </Button>
           </div>
