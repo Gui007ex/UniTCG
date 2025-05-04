@@ -1,3 +1,5 @@
+// src/components/Dialog/index.tsx
+import React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -7,10 +9,10 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import styles from './styles.module.css';
 import { Avatar } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useNavigate } from 'react-router-dom';
+import styles from './styles.module.css';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -24,18 +26,22 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 interface Props {
   open: boolean;
   onClose: () => void;
+  id: string;
+  code: string;
   name: string;
-  image: string;
-  price: string;
+  imgUrl: string;
+  price: number;
   description: string;
-  dealerName: string; // nome do usuário que está vendendo a carta
+  dealerName: string;
 }
 
-export default function CustomizedDialogs({
+export default function CustomizedDialog({
   open,
   onClose,
+  id,
+  code,
   name,
-  image,
+  imgUrl,
   price,
   description,
   dealerName,
@@ -44,7 +50,9 @@ export default function CustomizedDialogs({
 
   const handleBuy = () => {
     onClose();
-    navigate('/payment');
+    navigate('/payment', {
+      state: { id, code, name, imgUrl, price, dealerName, description },
+    });
   };
 
   return (
@@ -67,26 +75,40 @@ export default function CustomizedDialogs({
 
       <DialogContent dividers className={styles.cardContainer}>
         <div className={styles.card}>
-          <img src={image} alt={name} className={styles.img} />
+          <img src={imgUrl} alt={name} className={styles.img} />
           <div className={styles.description}>
-            <Typography variant="h5" gutterBottom><strong>{name}</strong></Typography>
+            <Typography variant="h5" gutterBottom>
+              <strong>{name}</strong>
+            </Typography>
+            <Typography variant="subtitle2" gutterBottom>
+              Código: {code}
+            </Typography>
             <Typography variant="body1" gutterBottom>
               {description}
             </Typography>
           </div>
         </div>
 
-        <Typography variant="h4" gutterBottom><strong>{price}</strong></Typography>
+        <Typography variant="h4" gutterBottom>
+          <strong>R$ {price.toFixed(2)}</strong>
+        </Typography>
 
         <div className={styles.avatar}>
-          <Avatar>{dealerName?.[0]?.toUpperCase()}</Avatar>
-          <Typography variant="body1" gutterBottom>{dealerName}</Typography>
+          <Avatar>{dealerName.charAt(0).toUpperCase()}</Avatar>
+          <Typography variant="body1" gutterBottom>
+            {dealerName}
+          </Typography>
         </div>
       </DialogContent>
 
       <DialogActions>
-        <Button autoFocus onClick={handleBuy} variant='outlined' className={styles.shoppingCart}>
-          <AddShoppingCartIcon fontSize='small' />
+        <Button
+          autoFocus
+          onClick={handleBuy}
+          variant="outlined"
+          className={styles.shoppingCart}
+        >
+          <AddShoppingCartIcon fontSize="small" />
           Comprar
         </Button>
       </DialogActions>
