@@ -23,10 +23,14 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('3.148.180.16:8080/auth/login', {
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_LOGIN_URL || 'http://localhost:8080/auth/login';
+      const response = await axios.post(BACKEND_URL, {
         usernameOrEmail,
         password,
       });
+
+      localStorage.setItem('user', JSON.stringify(response.data));
+      
       console.log('Usuário logado:', response.data);
       navigate('/main');
     } catch (error) {
