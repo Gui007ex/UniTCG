@@ -37,4 +37,9 @@ public class CartaController {
         return ResponseEntity.ok(allProdutos);
     }
 
+    @PostMapping(value = "/delete/{cartaId}")
+    public ResponseEntity<String> removeUsuario(@PathVariable UUID cartaId){
+        this.cartaService.deleteCarta(cartaId);
+        return ResponseEntity.ok("Carta excluída com sucesso");
+    }
 }
