@@ -23,12 +23,10 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', {
+      const response = await axios.post('3.148.180.16:8080/auth/login', {
         usernameOrEmail,
         password,
       });
-
-      // ✅ Aqui você pode salvar os dados do usuário no estado global ou localStorage
       console.log('Usuário logado:', response.data);
       navigate('/main');
     } catch (error) {

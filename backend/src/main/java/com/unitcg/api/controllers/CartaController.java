@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/carta")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CartaController {
 
     @Autowired

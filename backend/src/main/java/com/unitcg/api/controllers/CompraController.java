@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/compras")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CompraController {
 
     @Autowired
