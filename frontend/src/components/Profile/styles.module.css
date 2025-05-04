@@ -1,0 +1,37 @@
+
+.app{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container{
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 4rem;
+    flex-wrap: wrap;
+}
+
+.containerProfile{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    min-width: 280px;
+}
+
+.containerInfo{
+    flex: 2;
+}
+
+.display{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}

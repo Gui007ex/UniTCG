@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Login from './components/Login'
 import MainPage from './components/MainPage'
 import PaymentPage from './components/PaymentPage'
-// import Search from './components/Search';
-// import Banner from './assets/pokemon-tcg-pocket-banner.png'
+import Profile from './components/Profile'
+import AddProduct from './components/AddProduct'
 
 function App() {
   return (
@@ -12,7 +12,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/main" element={<MainPage />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/lucra" element={<AddProduct/>} />
       </Routes>
     </Router>
   )

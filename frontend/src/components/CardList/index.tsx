@@ -1,36 +1,34 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Carta } from '../../types/Card';
+import { fetchCartas } from '../../services/api';
+import Search from '../Search';
 import Cards from '../Cards';
-import { PokemonCard } from '../../types/Card';
 import styles from './styles.module.css';
 import { Button, CircularProgress, Typography } from '@mui/material';
-import Search from '../Search';
 
-function CardList() {
-  const [cards, setCards] = useState<PokemonCard[]>([]);
+const CardList: React.FC = () => {
+  const [cards, setCards] = useState<Carta[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [filteredCards, setFilteredCards] = useState<Carta[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const pageSize = 50;
+  const [searchTerm, setSearchTerm] = useState<string>(''); 
 
+  // carrega as cartas do back
   useEffect(() => {
-    const fetchData = async () => {
+    const load = async () => {
       setLoading(true);
       try {
-        const query = searchTerm
-          ? `?q=name:${encodeURIComponent(searchTerm)}&page=${currentPage}&pageSize=${pageSize}`
-          : `?page=${currentPage}&pageSize=${pageSize}`;
-        const response = await fetch(`https://api.pokemontcg.io/v2/cards${query}`);
-        const data = await response.json();
-        setCards(data.data);
-      } catch (error) {
-        console.error('Erro ao buscar cartas:', error);
-      } finally {
+        const all = await fetchCartas();
+        setCards(all);
+        setFilteredCards(all);
+      } catch (err) {
+        console.error('Erro ao buscar cartas:', err);
+      } finally{
         setLoading(false);
       }
     };
-
-    fetchData();
-  }, [currentPage, searchTerm]);
+    load();
+  }, []);
 
   const handleNextPage = () => {
     setCurrentPage((prev) => prev + 1);
@@ -72,6 +70,6 @@ function CardList() {
       )}
     </>
   );
-}
+};
 
 export default CardList;

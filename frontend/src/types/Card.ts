@@ -1,3 +1,11 @@
-import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import { Usuario } from "./Usuario";
 
-export type PokemonCard = PokemonTCG.Card;
+export interface Carta {
+    id: string;
+    name: string;
+    code: string;
+    description: string;
+    imgUrl: string;
+    price:string;
+    dealer: Usuario;
+}

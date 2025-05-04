@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -8,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import styles from './styles.module.css'
+import styles from './styles.module.css';
 import { Avatar } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +27,8 @@ interface Props {
   name: string;
   image: string;
   price: string;
+  description: string;
+  dealerName: string; // nome do usuário que está vendendo a carta
 }
 
 export default function CustomizedDialogs({
@@ -36,12 +37,14 @@ export default function CustomizedDialogs({
   name,
   image,
   price,
+  description,
+  dealerName,
 }: Props) {
-  const navigate = useNavigate(); // <- Hook de navegação
+  const navigate = useNavigate();
 
   const handleBuy = () => {
-    onClose(); // Fecha o diálogo
-    navigate('/payment'); // Redireciona para a página de pagamento
+    onClose();
+    navigate('/payment');
   };
 
   return (
@@ -68,15 +71,16 @@ export default function CustomizedDialogs({
           <div className={styles.description}>
             <Typography variant="h5" gutterBottom><strong>{name}</strong></Typography>
             <Typography variant="body1" gutterBottom>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit...
+              {description}
             </Typography>
           </div>
         </div>
 
         <Typography variant="h4" gutterBottom><strong>{price}</strong></Typography>
+
         <div className={styles.avatar}>
-          <Avatar />
-          <Typography variant="body1" gutterBottom>Nome de usuário</Typography>
+          <Avatar>{dealerName?.[0]?.toUpperCase()}</Avatar>
+          <Typography variant="body1" gutterBottom>{dealerName}</Typography>
         </div>
       </DialogContent>
 

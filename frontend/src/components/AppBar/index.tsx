@@ -14,8 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import PlayingCards from '../../assets/playing_cards.svg';
 import { useNavigate } from 'react-router-dom';
 
-const pages = ['Produtos', 'Cards', 'Blog'];
-const settings = ['Perfil', 'Logout'];
+const pages = ['Cards','Produtos', 'Blog'];
+const settings = ['Perfil', 'Anunciar produto', 'Logout'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -40,7 +40,7 @@ function ResponsiveAppBar() {
 
   const handleLogin = () => {
     // lógica de autenticação aqui
-    navigate('/main') // redireciona para MainPage
+    navigate('/') // redireciona para MainPage
   }
 
   return (
@@ -100,7 +100,7 @@ function ResponsiveAppBar() {
                   onClick={() => {
                     handleCloseNavMenu();
                     if (page === 'Cards') {
-                      navigate('/main');
+                      navigate('/');
                     }
                   }}
                 >
@@ -137,7 +137,7 @@ function ResponsiveAppBar() {
                 onClick={() => {
                   handleCloseNavMenu();
                   if (page === 'Cards') {
-                    navigate('/main');
+                    navigate('/');
                   }
                 }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
@@ -169,7 +169,21 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    if (setting === 'Perfil') {
+                      navigate('/profile');
+                    }
+                    if (setting === 'Anunciar produto') {
+                      navigate('/lucra');
+                    }
+                    if (setting === 'Anunciar produto') {
+                      // lógica de logout, se necessário
+                    }
+                  }}
+                >
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}

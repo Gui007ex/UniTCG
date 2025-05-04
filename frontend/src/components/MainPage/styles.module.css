@@ -25,3 +25,10 @@
     display: flex;
     flex-direction: row;
 } */
+
+.floatButton{
+    position: fixed;
+    z-index: 200;
+    bottom: 2rem;
+    right: 2rem;
+}
