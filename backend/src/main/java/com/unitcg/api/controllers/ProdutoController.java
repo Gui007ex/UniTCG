@@ -36,4 +36,9 @@ public class ProdutoController {
         return ResponseEntity.ok(allProdutos);
     }
 
+    @PostMapping(value = "/delete/{produtoId}")
+    public ResponseEntity<String> removeUsuario(@PathVariable UUID produtoId){
+        this.produtoService.deleteProduto(produtoId);
+        return ResponseEntity.ok("Produto excluído com sucesso");
+    }
 }

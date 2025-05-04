@@ -23,7 +23,8 @@ public class CompraController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public ResponseEntity<List<CompraResponseDTO>> getCompras(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<List<CompraResponseDTO>> getCompras(@RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "10") int size){
         List<CompraResponseDTO> allCompras = this.compraService.getCompras(page, size);
         return ResponseEntity.ok(allCompras);
     }
@@ -31,7 +32,13 @@ public class CompraController {
     @PostMapping(value = "/{item_id}/{buyer_id}")
     public ResponseEntity<Compra> create (@PathVariable UUID item_id,
                                           @PathVariable UUID buyer_id){
-
+        Compra compra = this.compraService.createCompra(buyer_id, item_id);
+        return ResponseEntity.ok(compra);
     }
 
+    @PostMapping(value = "/delete/{compraId}")
+    public ResponseEntity<String> removeUsuario(@PathVariable UUID compraId){
+        this.compraService.deleteCompra(compraId);
+        return ResponseEntity.ok("Compra excluída com sucesso");
+    }
 }
