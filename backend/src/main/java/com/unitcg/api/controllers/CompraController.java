@@ -25,7 +25,7 @@ public class CompraController {
 
     @GetMapping
     public ResponseEntity<List<CompraResponseDTO>> getCompras(@RequestParam(defaultValue = "0") int page,
-                                                              @RequestParam(defaultValue = "10") int size){
+                                                         @RequestParam(defaultValue = "10") int size){
         List<CompraResponseDTO> allCompras = this.compraService.getCompras(page, size);
         return ResponseEntity.ok(allCompras);
     }

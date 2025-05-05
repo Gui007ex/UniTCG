@@ -35,7 +35,7 @@ export default function RadioButtonsGroup() {
         id: `card-${cards.length + 1}`,
         label: `Cartão: ${cardName}`,
       };
-      setCards([...cards, newCard]);
+      //setCards([...cards, newCard]);
       setValue(newCard.id);
       setCardName('');
       setDialogOpen(false);
@@ -50,10 +50,10 @@ export default function RadioButtonsGroup() {
         {cards.map((card) => (
           <>
             <FormControlLabel
-                key={card.id}
-                value={card.id}
+                key={1}
+                value={1}
                 control={<Radio />}
-                label={card.label} 
+                label={1} 
                 className={styles.option}
                 />
             <Divider />

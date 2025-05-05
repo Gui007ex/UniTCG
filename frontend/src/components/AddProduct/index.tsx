@@ -7,6 +7,7 @@ import {Box, Button, TextField, Typography} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 function AddProduct() {
+    React
     const [nome, setNome] = useState('');
     const [codigo, setCodigo] = useState('');
     const [preco, setPreco] = useState('');
