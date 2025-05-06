@@ -7,6 +7,7 @@ import com.unitcg.api.domain.carta.CartaResponseDTO;
 import com.unitcg.api.domain.usuario.Usuario;
 import com.unitcg.api.repositories.CartaRep;
 import com.unitcg.api.repositories.UsuarioRep;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -40,7 +41,10 @@ public class CartaService {
     public List<CartaResponseDTO> getCartas(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Carta> cartasPage = this.repository.findAll(pageable);
-        return cartasPage.map(carta -> new CartaResponseDTO(carta.getId(), carta.getName(), carta.getCode(), carta.getPrice(), carta.getDescription(), carta.getImgUrl(), carta.getDealer())).stream().toList();
+        return cartasPage.map(carta -> new CartaResponseDTO(
+                        carta.getId(), carta.getName(), carta.getCode(), carta.getPrice(),
+                        carta.getDescription(), carta.getImgUrl(), carta.getDealer()))
+                .stream().toList();
     }
 
     public Carta createProduto(UUID usuarioId, CartaRequestDTO data){
@@ -50,7 +54,8 @@ public class CartaService {
             imgUrl = this.uploadImg(data.image());
         }
 
-        Usuario usuario = usuarioRep.findById(usuarioId).orElseThrow(() -> new IllegalArgumentException(("Usuario não encontrado")));
+        Usuario usuario = usuarioRep.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado"));
 
         Carta newCarta = new Carta();
         newCarta.setName(data.name());
@@ -66,23 +71,27 @@ public class CartaService {
     }
 
     public void deleteCarta(UUID id){
-        Carta carta = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Carta não encontrada"));
+        Carta carta = this.repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Carta não encontrada"));
         repository.delete(carta);
     }
 
-    private String uploadImg(MultipartFile multpartFile){
-        String fileName = UUID.randomUUID() + "-" + multpartFile.getOriginalFilename();
-
-        try{
-            File file = this.convertMultipartToFile(multpartFile);
+    @CircuitBreaker(name = "uploadImagem", fallbackMethod = "fallbackUploadImg")
+    private String uploadImg(MultipartFile multipartFile){
+        String fileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+        try {
+            File file = this.convertMultipartToFile(multipartFile);
             s3Client.putObject(bucketName, fileName, file);
             file.delete();
             return s3Client.getUrl(bucketName, fileName).toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao enviar imagem para o S3", e);
         }
-        catch (Exception e){
-            System.out.println("Erro criando arquivo");
-            return "";
-        }
+    }
+
+    private String fallbackUploadImg(MultipartFile file, Throwable throwable) {
+        System.out.println("Fallback ativado para uploadImg: " + throwable.getMessage());
+        return ""; // ou uma URL padrão
     }
 
     private File convertMultipartToFile(MultipartFile multipartFile) throws IOException {

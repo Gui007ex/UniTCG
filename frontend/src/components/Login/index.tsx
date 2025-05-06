@@ -91,6 +91,9 @@ function Login() {
         <Button variant='contained' onClick={handleLogin}>
           Login
         </Button>
+        <Button variant='text' onClick={() => navigate('/register')}>
+          Criar Conta
+        </Button>
       </div>
     </div>
   );

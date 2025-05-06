@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import AppBar from '../AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Footer from '../Footer';
-import { Avatar, Box, Button, Divider, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Typography } from '@mui/material';
 import { Usuario } from '../../types/Usuario';
 import { Carta } from '../../types/Card';
 import { fetchCartas } from '../../services/api';

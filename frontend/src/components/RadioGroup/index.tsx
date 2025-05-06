@@ -22,7 +22,7 @@ import LockOutlineIcon from '@mui/icons-material/LockOutline';
 export default function RadioButtonsGroup() {
   const [value, setValue] = useState('pix');
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [cards, setCards] = useState([]);
+  const [cards, _] = useState([]);
   const [cardName, setCardName] = useState('');
 
   const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -35,7 +35,6 @@ export default function RadioButtonsGroup() {
         id: `card-${cards.length + 1}`,
         label: `Cartão: ${cardName}`,
       };
-      //setCards([...cards, newCard]);
       setValue(newCard.id);
       setCardName('');
       setDialogOpen(false);
@@ -47,7 +46,7 @@ export default function RadioButtonsGroup() {
       <RadioGroup value={value} onChange={handleChange}>
         <FormControlLabel value="pix" control={<Radio />} label="Pix" className={styles.option} />
         <Divider />
-        {cards.map((card) => (
+        {cards.map((_) => (
           <>
             <FormControlLabel
                 key={1}

@@ -7,6 +7,7 @@ import com.unitcg.api.domain.produto.ProdutoResponseDTO;
 import com.unitcg.api.domain.usuario.Usuario;
 import com.unitcg.api.repositories.ProdutoRep;
 import com.unitcg.api.repositories.UsuarioRep;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -40,7 +41,10 @@ public class ProdutoService {
     public List<ProdutoResponseDTO> getProdutos(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Produto> produtosPage = this.repository.findAll(pageable);
-        return produtosPage.map(produto -> new ProdutoResponseDTO(produto.getId(), produto.getName(), produto.getDescription(), produto.getPrice(), produto.getImgUrl(), produto.getDealer())).stream().toList();
+        return produtosPage.map(produto -> new ProdutoResponseDTO(
+                        produto.getId(), produto.getName(), produto.getDescription(),
+                        produto.getPrice(), produto.getImgUrl(), produto.getDealer()))
+                .stream().toList();
     }
 
     public Produto createProduto(UUID usuarioId, ProdutoRequestDTO data){
@@ -50,7 +54,8 @@ public class ProdutoService {
             imgUrl = this.uploadImg(data.image());
         }
 
-        Usuario usuario = usuarioRep.findById(usuarioId).orElseThrow(() -> new IllegalArgumentException(("Usuario não encontrado")));
+        Usuario usuario = usuarioRep.findById(usuarioId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado"));
 
         Produto newProduto = new Produto();
         newProduto.setName(data.name());
@@ -65,23 +70,27 @@ public class ProdutoService {
     }
 
     public void deleteProduto(UUID id){
-        Produto produto = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+        Produto produto = this.repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
         repository.delete(produto);
     }
 
-    private String uploadImg(MultipartFile multpartFile){
-        String fileName = UUID.randomUUID() + "-" + multpartFile.getOriginalFilename();
-
-        try{
-            File file = this.convertMultipartToFile(multpartFile);
+    @CircuitBreaker(name = "uploadImagem", fallbackMethod = "fallbackUploadImg")
+    private String uploadImg(MultipartFile multipartFile){
+        String fileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+        try {
+            File file = this.convertMultipartToFile(multipartFile);
             s3Client.putObject(bucketName, fileName, file);
             file.delete();
             return s3Client.getUrl(bucketName, fileName).toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao enviar imagem para o S3", e);
         }
-        catch (Exception e){
-            System.out.println("Erro criando arquivo");
-            return "";
-        }
+    }
+
+    private String fallbackUploadImg(MultipartFile file, Throwable throwable) {
+        System.out.println("Fallback ativado para uploadImg: " + throwable.getMessage());
+        return ""; // ou uma URL padrão
     }
 
     private File convertMultipartToFile(MultipartFile multipartFile) throws IOException {
