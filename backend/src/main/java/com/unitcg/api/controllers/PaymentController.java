@@ -1,12 +1,9 @@
 package com.unitcg.api.controllers;
 
 import com.unitcg.api.context.PaymentContext;
-import com.unitcg.api.domain.payment.PaymentRequestDTO;
-import com.unitcg.api.domain.usuario.Usuario;
 import com.unitcg.api.exception.PaymentException;
 import com.unitcg.api.factories.PaymentFactory;
 import com.unitcg.api.interfaces.PaymentStrat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

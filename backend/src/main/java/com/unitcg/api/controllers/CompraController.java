@@ -2,7 +2,6 @@ package com.unitcg.api.controllers;
 
 import com.unitcg.api.domain.compra.Compra;
 import com.unitcg.api.domain.compra.CompraResponseDTO;
-import com.unitcg.api.domain.usuario.Usuario;
 import com.unitcg.api.service.CompraService;
 import com.unitcg.api.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
