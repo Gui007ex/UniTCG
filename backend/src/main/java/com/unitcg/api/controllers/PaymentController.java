@@ -1,9 +1,12 @@
 package com.unitcg.api.controllers;
 
 import com.unitcg.api.context.PaymentContext;
+import com.unitcg.api.domain.payment.PaymentRequestDTO;
+import com.unitcg.api.domain.payment.PaymentResponseDTO;
 import com.unitcg.api.exception.PaymentException;
 import com.unitcg.api.factories.PaymentFactory;
 import com.unitcg.api.interfaces.PaymentStrat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,24 +14,21 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:5173")
 public class PaymentController {
 
-    @GetMapping
-    public void newPayment(){
+    @PostMapping
+    public ResponseEntity<PaymentResponseDTO> processPayment (@RequestBody PaymentRequestDTO body){
+        String result = "Pagamento efetuado";
         try {
             PaymentStrat creditCard = PaymentFactory.createPayment(
-                    "creditcard",
-                    "Joao Antonio",
-                    "254",
-                    "1234567891025489",
-                    "12/25"
+                    body.type(),
+                    body.param()
             );
             PaymentContext context = new PaymentContext(creditCard);
-            System.out.println("hi");
             context.executePayment(150.50);
         }
         catch (PaymentException e){
-            System.out.println("Erro: " + e.getMessage());
+            result = "Erro: " + e.getMessage();
         }
+        return ResponseEntity.ok(new PaymentResponseDTO(result));
     }
-
 
 }

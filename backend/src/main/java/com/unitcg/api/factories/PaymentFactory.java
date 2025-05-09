@@ -19,7 +19,7 @@ public class PaymentFactory {
                 }
                 return new ExternalPayment(param[0], param[1]);
             default:
-                throw new PaymentException("Tipo de pag desconhecido");
+                throw new PaymentException("Tipo de pagamento desconhecido");
         }
     }
 }
