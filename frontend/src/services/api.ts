@@ -1,6 +1,6 @@
 import { Carta } from '../types/Card';
 
-const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://3.148.180.16:8080/api/carta';
+const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080/api/carta';
 
 export async function fetchCartas(): Promise<Carta[]> {
   const response = await fetch(API_URL);

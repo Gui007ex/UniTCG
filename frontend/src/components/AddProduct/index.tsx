@@ -34,7 +34,7 @@ function AddProduct() {
     }
 
     try {
-        const url = `http://3.148.180.16:8080/api/carta/usuario/${user.id}`;
+        const url = `http://localhost:8080/api/carta/usuario/${user.id}`;
         console.log('POST multipart to', url, formData);
 
         const res = await fetch(url, {

@@ -29,7 +29,7 @@ function Register() {
 
     const handleRegister = async () => {
     try {
-        await axios.post('http://3.148.180.16:8080/api/usuario', {
+        await axios.post('http://localhost:8080/api/usuario', {
         name: username,
         email,
         password,

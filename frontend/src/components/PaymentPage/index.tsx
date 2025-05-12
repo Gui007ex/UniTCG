@@ -24,21 +24,40 @@ export default function PaymentPage() {
   const { state } = useLocation() as { state: LocationState };
 
   const handleConfirm = async () => {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (!user.id) { alert('Faça login'); return; }
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (!user.id) { alert('Faça login'); return; }
 
-    try {
-      const res = await fetch(
-        `http://3.148.180.16:8080/api/compras/${state.id}/${user.id}`,
-        { method:'POST' }
-      );
-      if (!res.ok) throw new Error(res.statusText);
-      alert('Compra efetuada!');
-      navigate('/main');
-    } catch {
-      alert('Erro ao efetuar compra');
-    }
-  };
+  try {
+    // Envie o body que o backend espera
+    const paymentRes = await fetch('http://localhost:8080/api/pagamento', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        type: "creditcard",
+        param: ["Joao da silva", "123", "1234123412341234", "05/27"]
+      })
+    });
+
+    if (!paymentRes.ok) throw new Error(await paymentRes.text());
+
+    const paymentData = await paymentRes.json();
+    alert(paymentData.result); // ou .mensagem, dependendo do DTO
+
+    // Depois do pagamento, finalize a compra
+    const compraRes = await fetch(`http://localhost:8080/api/compras/${state.id}/${user.id}`, {
+      method: 'POST'
+    });
+
+    if (!compraRes.ok) throw new Error('Erro ao concluir compra');
+    alert('Compra efetuada!');
+    navigate('/main');
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao efetuar pagamento');
+  }
+};
 
   return (
     <div className={styles.app}>
