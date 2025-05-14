@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios'; // <--- Biblioteca para requisições
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
