@@ -3,7 +3,7 @@ import styles from './styles.module.css';
 import AppBar from '../AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Footer from '../Footer';
-import { Avatar, Button, Divider, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Typography, Link } from '@mui/material';
 import { Usuario } from '../../types/Usuario';
 import { Carta } from '../../types/Card';
 import { fetchCartas } from '../../services/api';
@@ -42,6 +42,10 @@ const Profile: React.FC = () => {
     );
   }
 
+  // Remove qualquer caractere que não seja número
+  const cleanedNumber = user.number?.replace(/\D/g, '');
+  const whatsappLink = cleanedNumber ? `https://wa.me/${cleanedNumber}` : null;
+
   return (
     <div className={styles.app}>
       <AppBar />
@@ -55,9 +59,16 @@ const Profile: React.FC = () => {
           <Typography variant="h5" sx={{ mt: 1 }}>
             {user.name}
           </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            {user.email}
-          </Typography>
+          <Typography variant="body1">{user.email}</Typography>
+
+          {whatsappLink && (
+            <Typography variant="body1" sx={{ mb: 2 }}>
+              <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                {user.number}
+              </Link>
+            </Typography>
+          )}
+
           <Divider variant="middle" flexItem sx={{ mb: 2 }} />
           <Button variant="contained">Editar perfil</Button>
         </div>

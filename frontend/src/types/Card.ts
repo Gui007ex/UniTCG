@@ -8,4 +8,5 @@ export interface Carta {
     imgUrl: string;
     price:string;
     dealer: Usuario;
+    locked: boolean;
 }

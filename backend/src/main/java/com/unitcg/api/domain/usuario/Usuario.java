@@ -22,6 +22,7 @@ public class Usuario {
 
     private String name;
     private String password;
+    private String number;
 
     @Email (message = "Email inválido")
     private String email;

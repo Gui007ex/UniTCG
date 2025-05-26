@@ -40,10 +40,10 @@ public class CartaService {
 
     public List<CartaResponseDTO> getCartas(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
-        Page<Carta> cartasPage = this.repository.findAll(pageable);
+        Page<Carta> cartasPage = repository.findByLockedFalse(pageable);
         return cartasPage.map(carta -> new CartaResponseDTO(
                         carta.getId(), carta.getName(), carta.getCode(), carta.getPrice(),
-                        carta.getDescription(), carta.getImgUrl(), carta.getDealer()))
+                        carta.getDescription(), carta.getImgUrl(), carta.getDealer(),carta.isLocked()))
                 .stream().toList();
     }
 
@@ -100,5 +100,38 @@ public class CartaService {
         fos.write(multipartFile.getBytes());
         fos.close();
         return convFile;
+    }
+
+    public void lockCarta(UUID cartaId) {
+        Carta carta = repository.findById(cartaId)
+                .orElseThrow(() -> new IllegalArgumentException("Carta não encontrada"));
+        if (!carta.isLocked()) {
+            carta.setLocked(true);
+            repository.save(carta);
+        } else {
+            throw new IllegalStateException("Carta já está sendo visualizada por outro usuário");
+        }
+    }
+
+    public void unlockCarta(UUID cartaId) {
+        Carta carta = repository.findById(cartaId)
+                .orElseThrow(() -> new IllegalArgumentException("Carta não encontrada"));
+        carta.setLocked(false);
+        repository.save(carta);
+    }
+
+    public CartaResponseDTO getCartaById(UUID id) {
+        Carta carta = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Carta não encontrada"));
+        return new CartaResponseDTO(
+                carta.getId(),
+                carta.getName(),
+                carta.getCode(),
+                carta.getPrice(),
+                carta.getDescription(),
+                carta.getImgUrl(),
+                carta.getDealer(),
+                carta.isLocked()
+        );
     }
 }

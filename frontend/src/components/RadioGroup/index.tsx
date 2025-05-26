@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function RadioGroupWithFields({ onPaymentInfoChange }: Props) {
-  const [value, setValue] = useState<'creditcard' | 'pix'>('creditcard');
+  const [value, setValue] = useState<'pix' | 'creditcard'>('pix');
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvc, setCvc] = useState('');

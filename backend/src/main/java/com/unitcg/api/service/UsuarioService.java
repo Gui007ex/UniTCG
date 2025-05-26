@@ -24,6 +24,7 @@ public class UsuarioService {
         usuario.setName(usuarioData.name());
         usuario.setPassword(usuarioData.password());
         usuario.setEmail(usuarioData.email());
+        usuario.setNumber(usuarioData.number());
 
         repository.save(usuario);
 
@@ -32,13 +33,13 @@ public class UsuarioService {
 
     public UsuarioResponseDTO getUsuario(UUID id){
         Usuario usuario = this.repository.findById(id).orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado"));
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getName(), usuario.getEmail(), usuario.getPassword());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getName(), usuario.getEmail(), usuario.getPassword(), usuario.getNumber());
     }
 
     public List<UsuarioResponseDTO> getUsuarios(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Usuario> usuariosPage = this.repository.findAll(pageable);
-        return usuariosPage.map(usuario -> new UsuarioResponseDTO(usuario.getId(), usuario.getName(), usuario.getEmail(), usuario.getPassword())).stream().toList();
+        return usuariosPage.map(usuario -> new UsuarioResponseDTO(usuario.getId(), usuario.getName(), usuario.getEmail(), usuario.getPassword(), usuario.getNumber())).stream().toList();
     }
 
     public void deleteUsuario(UUID id){

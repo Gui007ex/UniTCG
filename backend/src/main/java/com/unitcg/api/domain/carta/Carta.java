@@ -26,6 +26,9 @@ public class Carta {
     private int price;
     private String imgUrl;
 
+    @Column(nullable = false,name = "is_locked")
+    private boolean locked = false;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario dealer;

@@ -4,7 +4,8 @@ CREATE TABLE usuario (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name VARCHAR(30) NOT NULL,
     password VARCHAR(30) NOT NULL,
-    email VARCHAR(30) NOT NULL
+    email VARCHAR(30) NOT NULL,
+    number VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE produto (
@@ -24,6 +25,7 @@ CREATE TABLE carta (
     code VARCHAR(20) NOT NULL,
     img_url VARCHAR(500) NOT NULL,
     price INT NOT NULL,
+    is_locked BOOLEAN DEFAULT FALSE,
     usuario_id UUID,
     FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );

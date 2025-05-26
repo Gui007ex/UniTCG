@@ -3,6 +3,12 @@
     width: 200px;
     height: 320px;
     margin: 0.5rem;
+    transition: opacity 0.3s ease, cursor 0.3s ease;
+}
+
+.cardWrapper.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .card {

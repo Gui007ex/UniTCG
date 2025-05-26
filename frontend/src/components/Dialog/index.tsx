@@ -1,4 +1,4 @@
-//import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -32,6 +32,7 @@ interface Props {
   price: number;
   description: string;
   dealerName: string;
+  dealerNumber: string;
 }
 
 export default function CustomizedDialog({
@@ -43,6 +44,7 @@ export default function CustomizedDialog({
   imgUrl,
   price,
   description,
+  dealerNumber,
   dealerName,
 }: Props) {
   const navigate = useNavigate();
@@ -51,11 +53,25 @@ export default function CustomizedDialog({
   const user = storedUser ? JSON.parse(storedUser) : null;
   const isDealer = user ? user.name === dealerName : false;
 
-  const handleBuy = () => {
-    onClose();
-    navigate('/payment', {
-      state: { id, code, name, imgUrl, price, dealerName, description },
-    });
+  const handleBuy = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/carta/${id}`);
+      const data = await response.json();
+
+      if (data.locked) {
+        alert('Esta carta está indisponível no momento.');
+        window.location.reload();
+        return;
+      }
+
+      onClose();
+      navigate('/payment', {
+        state: { id, code, name, imgUrl, price, dealerName, dealerNumber, description },
+      });
+    } catch (error) {
+      console.error('Erro ao verificar disponibilidade da carta:', error);
+      alert('Erro ao verificar disponibilidade. Tente novamente.');
+    }
   };
 
   return (

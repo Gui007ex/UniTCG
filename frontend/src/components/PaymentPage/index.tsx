@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Typography,
@@ -20,7 +20,10 @@ interface LocationState {
   price: number;
   dealerName: string;
   description: string;
+  dealerNumber: string;
 }
+
+const baseUrl = 'http://localhost:8080';
 
 export default function PaymentPage() {
   const navigate = useNavigate();
@@ -28,12 +31,36 @@ export default function PaymentPage() {
 
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo>({ type: 'pix' });
 
+  useEffect(() => {
+    // Bloqueia a carta ao entrar na página
+    const lockCarta = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/api/carta/lock/${state.id}`, { method: 'POST' });
+        if (!res.ok) throw new Error('Falha ao bloquear carta');
+      } catch (err) {
+        console.error(err);
+        alert('Não foi possível bloquear a carta para compra.');
+        navigate('/main'); // volta para main caso falhe
+      }
+    };
+
+    lockCarta();
+
+    // Desbloqueia a carta ao sair da página
+    return () => {
+      fetch(`${baseUrl}/api/carta/unlock/${state.id}`, { method: 'POST' }).catch(console.error);
+    };
+  }, [state.id, navigate]);
+
   const handleConfirm = async () => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (!user.id) { alert('Faça login'); return; }
+    if (!user.id) {
+      alert('Faça login');
+      return;
+    }
 
     try {
-      const paymentRes = await fetch('http://localhost:8080/api/pagamento', {
+      const paymentRes = await fetch(`${baseUrl}/api/pagamento`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -48,12 +75,14 @@ export default function PaymentPage() {
       });
 
       if (!paymentRes.ok) throw new Error(await paymentRes.text());
+
       const compraRes = await fetch(
-        `http://localhost:8080/api/compras/${state.id}/${user.id}`,
+        `${baseUrl}/api/compras/${state.id}/${user.id}`,
         { method: 'POST' }
       );
 
       if (!compraRes.ok) throw new Error('Erro ao concluir compra');
+
       alert('Compra efetuada!');
       navigate('/main');
     } catch (err) {
@@ -94,6 +123,19 @@ export default function PaymentPage() {
               <Divider flexItem sx={{ my: 1 }} />
               <Avatar>{state.dealerName.charAt(0)}</Avatar>
               <Typography>{state.dealerName}</Typography>
+              {state.dealerNumber && (
+              <Typography variant="body2" color="text.secondary">
+                Contato para recebimento:{' '}
+                <a
+                  href={`https://wa.me/${state.dealerNumber.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#25D366', textDecoration: 'none', fontWeight: 500 }}
+                >
+                  {state.dealerNumber}
+                </a>
+              </Typography>
+            )}
               <Divider flexItem sx={{ my: 1 }} />
               <Typography><strong>Total a pagar</strong></Typography>
               <Typography>R$ {state.price.toFixed(2)}</Typography>

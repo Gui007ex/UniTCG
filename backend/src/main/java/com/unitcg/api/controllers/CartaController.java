@@ -38,6 +38,24 @@ public class CartaController {
         return ResponseEntity.ok(allProdutos);
     }
 
+    @PostMapping("/lock/{id}")
+    public ResponseEntity<String> lockCarta(@PathVariable UUID id) {
+        cartaService.lockCarta(id);
+        return ResponseEntity.ok("Carta bloqueada com sucesso.");
+    }
+
+    @PostMapping("/unlock/{id}")
+    public ResponseEntity<String> unlockCarta(@PathVariable UUID id) {
+        cartaService.unlockCarta(id);
+        return ResponseEntity.ok("Carta desbloqueada com sucesso.");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CartaResponseDTO> getCartaById(@PathVariable UUID id) {
+        CartaResponseDTO cartaDTO = cartaService.getCartaById(id);
+        return ResponseEntity.ok(cartaDTO);
+    }
+
     @PostMapping(value = "/delete/{cartaId}")
     public ResponseEntity<String> removeUsuario(@PathVariable UUID cartaId){
         this.cartaService.deleteCarta(cartaId);

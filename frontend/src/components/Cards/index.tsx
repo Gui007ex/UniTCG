@@ -10,12 +10,12 @@ interface CardsProps {
 }
 
 const Cards: React.FC<CardsProps> = ({ cardData }) => {
-  const { id, name, code, description, imgUrl, price, dealer } = cardData;
+  const { id, name, code, description, imgUrl, price, dealer, locked} = cardData;
   const title = `${name} (${code})`;
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <div className={styles.cardWrapper}>
+    <div className={`${styles.cardWrapper} ${locked ? styles.locked : ''}`}>
       <MUICard className={styles.card}>
         <CardMedia
           component="img"
@@ -30,7 +30,7 @@ const Cards: React.FC<CardsProps> = ({ cardData }) => {
           <Typography variant="body2" className={styles.priceTag}>
             R$ {typeof price === 'number' ? price : price}
           </Typography>
-          <Button variant="outlined" onClick={() => setDialogOpen(true)}>
+          <Button variant="outlined" onClick={() => {if (!locked) setDialogOpen(true);}} disabled={locked}>
             <AddIcon />
           </Button>
         </CardContent>
@@ -45,6 +45,7 @@ const Cards: React.FC<CardsProps> = ({ cardData }) => {
           price={typeof price === 'number' ? price : parseFloat(price)}
           description={description}
           dealerName={dealer.name}
+          dealerNumber={dealer.number}
         />
       </MUICard>
     </div>
