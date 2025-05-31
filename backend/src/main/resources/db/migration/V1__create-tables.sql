@@ -1,6 +1,3 @@
-DROP DATABASE postgres;
-CREATE DATABASE postgres;
-
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE usuario (
